@@ -1,0 +1,25 @@
+#!/usr/bin/bash
+
+spinner() {
+    local pid=$1
+    local delay=0.1
+    local spinstr='|/-\'
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+        local temp=${spinstr#?}
+        printf " [%c]  " "$spinstr"
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b\b\b\b"
+    done
+    printf "    \b\b\b\b"
+}
+
+echo -e "\033[32mRe-formatting...\033[0m"
+
+(find . -regex '.*\.\(c\|h\)' -exec clang-format -i --assume-filename=./.clang-format {} \;) &
+# (find . -regex '.*\.\(c\|h\)' -exec clang-format -i -style=Google {} \;) &
+
+pid=$!
+spinner $pid
+
+echo -e "\033[32mRe-formatting finished\033[0m"

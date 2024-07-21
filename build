@@ -1,0 +1,17 @@
+#!/bin/sh
+
+export PATH="/home/yhpgi/toolchain/bin:$PATH"
+export ARCH="arm64"
+export CROSS_COMPILE="aarch64-none-linux-gnu-"
+export INSTALL_MOD_STRIP=1
+
+export CONFIG_MT7668S_WIFI=m
+export CONFIG_MT7668S_WIFI_PREALLOC=n
+
+# replace with n if your taget device isn't meson_g12a
+export CONFIG_MT7668S_WIFI_MESON_G12A_PATCH=y
+# replace KERNELDIR with your kernel path
+export KERNELDIR=/home/yhpgi/dump/kcompiler/compile-kernel/kernel/linux-5.4.y
+
+./clean
+make -j8 KERNELDIR=${KERNELDIR}
